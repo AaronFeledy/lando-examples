@@ -13,5 +13,5 @@ These examples provide useful functionality that can be added to any Lando confi
 
 Examples of advanced functionality and configurations using Lando.
 
-- Decoupled Drupal with Gatsby - Coming soon
-- Github Actions - Coming soon
+- Decoupled Drupal with Gatsby - Coming soon - A Lando environment for developing decoupled Drupal with a Gatsby front-end.
+- Github Actions Tests - Coming soon - Use Lando to run tests using Github Actions
