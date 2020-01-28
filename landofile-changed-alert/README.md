@@ -14,17 +14,4 @@ environment. On subsequent starts, the hash is compared against the current
 landofile to see if the file has changed and a rebuild is required. If so, an 
 alert message will be printed to the user's terminal.
 
-```yaml
-services:
-  appserver:
-    build:
-      # Save a hash of our lando config for future integrity checking
-      - sha1sum /app/.lando.yml > ~/.lando.yml.sha1
-
-events:
-  post-start:
-    # Alert user if landofile and current environment are out of sync.
-    - cd /app && sha1sum --status -c ~/.lando.yml.sha1 || echo $(echo $(tput setab 1 && tput setaf 7)Your Lando environment is outdated! Please run \"lando rebuild\" to update.$(tput sgr 0))
-```
-
 You may also find it useful to add the line from the `post-start` event to commonly used tooling so that the check is more frequent and more likely to be noticed.
