@@ -1,0 +1,22 @@
+name: example-colorful-messages
+
+services:
+  appserver:
+    type: php
+    environment:
+      TXT_RESET: tput sgr 0
+      TXT_RED: tput setaf 1
+      TXT_GREEN: tput setaf 2
+      TXT_YELLOW: tput setaf 3
+      TXT_CYAN: tput setaf 6
+      TXT_ALERT: tput setab 1 && tput setaf 7
+
+events:
+  post-start:
+    - echo
+    # Demonstrate color usage.
+    - bash -c "echo $($TXT_CYAN)Maybe something is being installed...$($TXT_RESET)"
+    - bash -c "echo $($TXT_YELLOW)Perhaps something is not quite right.$($TXT_RESET)"
+    - bash -c "echo $($TXT_RED)Something is definitely not right.$($TXT_RESET)"
+    - bash -c "echo $($TXT_ALERT)Oh no, something terrible has happened!$($TXT_RESET)"
+    - bash -c "echo $($TXT_GREEN)Just kidding... Everything is fine.$($TXT_RESET)"
