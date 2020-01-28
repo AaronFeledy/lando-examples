@@ -1,8 +1,8 @@
 name: example-landofile-changed-alert
-recipe: lamp
 
 services:
   appserver:
+    type: php
     build:
       # Save a hash of our lando config for future integrity checking
       - sha1sum /app/.lando.yml > ~/.lando.yml.sha1
