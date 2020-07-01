@@ -1,0 +1,30 @@
+name: example-tome
+recipe: drupal8
+config:
+  webroot: web
+
+services:
+  appserver:
+    build:
+      - cd /app/drupal && COMPOSER_PROCESS_TIMEOUT=600 composer install
+      - cd /app/drupal && drush tome:install
+    overrides:
+      environment:
+        # Pass the site URL to Drush
+        DRUSH_OPTIONS_URI: "https://example-tome.lndo.site"
+
+tooling:
+  install:
+    description: Install Drupal dependencies
+    service: appserver
+    cmd:
+      # Install dependencies
+      - cd /app/drupal && COMPOSER_PROCESS_TIMEOUT=600 composer install
+      # Import content and config
+      - cd /app/drupal && drush tome:install
+
+  build:
+    description: Build Static Assets
+    service: appserver
+    cmd:
+      - cd /app/drupal && drush tome:static

@@ -1,0 +1,106 @@
+{
+    "uuid": [
+        {
+            "value": "528cb1ee-76a1-4e5c-9efc-52be8bf96d32"
+        }
+    ],
+    "langcode": [
+        {
+            "value": "en"
+        }
+    ],
+    "type": [
+        {
+            "target_id": "article",
+            "target_type": "node_type",
+            "target_uuid": "709f0172-31f7-4f6e-9fec-57d1907c74aa"
+        }
+    ],
+    "revision_timestamp": [
+        {
+            "value": "2020-07-01T23:29:56+00:00",
+            "format": "Y-m-d\\TH:i:sP"
+        }
+    ],
+    "revision_uid": [
+        {
+            "target_type": "user",
+            "target_uuid": "788661e2-eca9-4545-8411-632c2d29b754"
+        }
+    ],
+    "revision_log": [],
+    "status": [
+        {
+            "value": true
+        }
+    ],
+    "uid": [
+        {
+            "target_type": "user",
+            "target_uuid": "788661e2-eca9-4545-8411-632c2d29b754"
+        }
+    ],
+    "title": [
+        {
+            "value": "An Example Article"
+        }
+    ],
+    "created": [
+        {
+            "value": "2020-07-01T23:22:40+00:00",
+            "format": "Y-m-d\\TH:i:sP"
+        }
+    ],
+    "changed": [
+        {
+            "value": "2020-07-01T23:29:56+00:00",
+            "format": "Y-m-d\\TH:i:sP"
+        }
+    ],
+    "promote": [
+        {
+            "value": true
+        }
+    ],
+    "sticky": [
+        {
+            "value": false
+        }
+    ],
+    "default_langcode": [
+        {
+            "value": true
+        }
+    ],
+    "revision_translation_affected": [
+        {
+            "value": true
+        }
+    ],
+    "path": [
+        {
+            "alias": "",
+            "pid": null,
+            "langcode": "en"
+        }
+    ],
+    "body": [
+        {
+            "value": "<p>This is some test content. I am entering it into the standard Drupal interface.<\/p>\r\n",
+            "format": "basic_html",
+            "summary": ""
+        }
+    ],
+    "comment": [
+        {
+            "status": 2,
+            "cid": 0,
+            "last_comment_timestamp": 0,
+            "last_comment_name": "",
+            "last_comment_uid": 0,
+            "comment_count": 0
+        }
+    ],
+    "field_image": [],
+    "field_tags": []
+}
