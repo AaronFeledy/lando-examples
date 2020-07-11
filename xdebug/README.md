@@ -1,17 +1,19 @@
-# Landofile Changed Alert
+# Xdebug On/Off Switch
 
-![screenshot](https://raw.githubusercontent.com/AaronFeledy/lando-examples/master/landofile-changed-alert/screenshot.png)
+When working with PHP applications, Xdebug is a useful tool allowing you to step
+through your code and inspect values at run time. Lando gives you the ability
+to add a single line to your PHP based recipe configuration to enable Xdebug.
+However, this comes at a cost. Enabling Xdebug means that lots of debug data is
+being generated for every PHP request. This can make loading pages in Drupal or
+running Drush commands *significantly* slower.
 
-When your landofile has changed, a `lando rebuild` is required to update the 
-environment to match your new config. While this may be an obvious step when 
-you are making the changes yourself, it may not be as obvious when other people
-or tools make changes. When using version control software such as Git to merge
-in a team member's latest work, or switching between your own branches, your
-Lando environment may need to be updated to match the config.
+Enabling the Xdebug option only when needed might sound like a good way to deal
+with this performance issue, however, making such a change to your `.lando.yml`
+requires a `lando rebuild` each time you turn it on or off. The rebuild might
+take much longer than the time you would save. 
 
-This example saves a hash of the lando configuration used to build the
-environment. On subsequent starts, the hash is compared against the current
-landofile to see if the file has changed and a rebuild is required. If so, an 
-alert message will be printed to the user's terminal.
-
-You may also find it useful to add the line from the `post-start` event to commonly used tooling so that the check is more frequent and more likely to be noticed.
+Disabling Xdebug in your Lando config and instead toggling it with the tooling
+definitions included in this example will allow you a quick command to turn
+Xdebug on or off quickly and painlessly. You can now enjoy the benefits of
+Xdebug when you need it, and you are free from the performance cost when you
+don't.

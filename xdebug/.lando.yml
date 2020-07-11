@@ -1,16 +1,23 @@
-name: example-landofile-changed-alert
+name: example-xdebug
+recipe: drupal9
 
-services:
-  appserver:
-    type: php
-    environment:
-      TXT_RESET: tput sgr 0
-      TXT_ALERT: tput setab 1 && tput setaf 7
-    build:
-      # Save a hash of our lando config for future integrity checking
-      - sha1sum /app/.lando.yml > ~/.lando.yml.sha1
+config:
+  webroot: .
+  # Notice the lack of xdebug config here. It is off by default. All we need is the tooling below.
 
-events:
-  post-start:
-    # Alert user if landofile and current environment are out of sync.
-    - cd /app && sha1sum --status -c ~/.lando.yml.sha1 || echo $(echo $($TXT_ALERT)Your Lando environment is outdated! Please run \"lando rebuild\" to update.$($TXT_RESET))
+tooling:
+  xdebug-on:
+    service: appserver
+    description: Enable xdebug.
+    user: root
+    cmd:
+      - docker-php-ext-enable xdebug && pkill -o -USR2 php-fpm || /etc/init.d/apache2 reload
+      - tput setaf 2 && echo "Xdebug On" && tput sgr 0 && echo
+
+  xdebug-off:
+    service: appserver
+    description: Disable xdebug for nginx.
+    user: root
+    cmd:
+      - rm /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && pkill -o -USR2 php-fpm || /etc/init.d/apache2 reload
+      - tput setaf 1 && echo "Xdebug Off" && tput sgr 0 && echo
