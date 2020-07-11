@@ -6,8 +6,8 @@ config:
 services:
   appserver:
     build:
-      - cd /app/drupal && COMPOSER_PROCESS_TIMEOUT=600 composer install
-      - cd /app/drupal && drush tome:install
+      - cd /app && COMPOSER_PROCESS_TIMEOUT=600 composer install
+      - cd /app && drush tome:install -y
     overrides:
       environment:
         # Pass the site URL to Drush
@@ -19,12 +19,12 @@ tooling:
     service: appserver
     cmd:
       # Install dependencies
-      - cd /app/drupal && COMPOSER_PROCESS_TIMEOUT=600 composer install
+      - cd /app && COMPOSER_PROCESS_TIMEOUT=600 composer install
       # Import content and config
-      - cd /app/drupal && drush tome:install
+      - cd /app && drush tome:install
 
   build:
     description: Build Static Assets
     service: appserver
     cmd:
-      - cd /app/drupal && drush tome:static
+      - cd /app && drush tome:static

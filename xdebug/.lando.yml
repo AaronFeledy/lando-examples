@@ -1,0 +1,16 @@
+name: example-landofile-changed-alert
+
+services:
+  appserver:
+    type: php
+    environment:
+      TXT_RESET: tput sgr 0
+      TXT_ALERT: tput setab 1 && tput setaf 7
+    build:
+      # Save a hash of our lando config for future integrity checking
+      - sha1sum /app/.lando.yml > ~/.lando.yml.sha1
+
+events:
+  post-start:
+    # Alert user if landofile and current environment are out of sync.
+    - cd /app && sha1sum --status -c ~/.lando.yml.sha1 || echo $(echo $($TXT_ALERT)Your Lando environment is outdated! Please run \"lando rebuild\" to update.$($TXT_RESET))
