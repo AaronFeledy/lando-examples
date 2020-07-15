@@ -1,0 +1,43 @@
+name: example-platformsh
+recipe: drupal9
+
+# Loads your local .env file containing your personal Platform CLI token.
+env_file:
+  - .env
+
+services:
+  appserver:
+    overrides:
+      environment:
+        # Place your Platform.sh project ID here
+        PLATFORMSH_PROJECT_ID: "YourProjectID"
+
+    build:
+      # Install Platform.sh CLI
+      - mkdir -p /var/www/.platformsh/bin
+      - curl -fsSL -o /var/www/.platformsh/bin/platform https://github.com/platformsh/platformsh-cli/releases/latest/download/platform.phar
+      - chmod ug+x /var/www/.platformsh/bin/platform
+
+tooling:
+  platform:
+    description: Run Platform CLI commands
+    service: appserver
+    cmd: /var/www/.platformsh/bin/platform
+
+  alias-dl:
+    description: Downloads Drush aliases for this project
+    cmd:
+      - appserver: /var/www/.platformsh/bin/platform drush-alias
+
+  db-dl:
+    description: Download the latest db from the "master" environment
+    service: appserver
+    cmd:
+      - cd /app && /var/www/.platformsh/bin/platform db:dump --gzip --environment=master --project=$PLATFORMSH_PROJECT_ID --app=drupal --file=db_dump.sql.gz --yes
+
+  files-dl:
+    service: appserver
+    description: Download the latest content files from the "master" environment
+    cmd:
+      - mkdir -p /app/web/sites/default/files
+      - cd /app && /var/www/.platformsh/bin/platform mount:download --yes --environment=master --project=$PLATFORMSH_PROJECT_ID --app=drupal --mount=web/sites/default/files --target=/app/web/sites/default/files --exclude=styles --exclude=php/twig/* --exclude=css --exclude=js
