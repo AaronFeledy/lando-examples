@@ -17,3 +17,5 @@ definitions included in this example will allow you a quick command to turn
 Xdebug on or off quickly and painlessly. You can now enjoy the benefits of
 Xdebug when you need it, and you are free from the performance cost when you
 don't.
+
+Use `lando xdebug-on` to enable Xdebug and `lando xdebug-off` to disable Xdebug.
