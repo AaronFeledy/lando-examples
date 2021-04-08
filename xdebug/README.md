@@ -19,3 +19,8 @@ Xdebug when you need it, and you are free from the performance cost when you
 don't.
 
 Use `lando xdebug-on` to enable Xdebug and `lando xdebug-off` to disable Xdebug.
+
+*__Note:__ Older versions of Xdebug that shipped with Lando worked without the
+Xdebug browser extension. Since Lando services added Xdebug 3, you must now have
+the browser extension installed and have it in debug mode when you would like to
+debug.*

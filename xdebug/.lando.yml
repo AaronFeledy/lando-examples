@@ -3,7 +3,14 @@ recipe: drupal9
 
 config:
   webroot: .
-  # Notice the lack of xdebug config here. It is off by default. All we need is the tooling below.
+  # Xdebug is off by default. We use the tooling below to turn it on as needed.
+  xdebug: false
+
+services:
+  appserver:
+    overrides:
+      environment:
+        XDEBUG_MODE: 'debug'
 
 tooling:
   xdebug-on:
