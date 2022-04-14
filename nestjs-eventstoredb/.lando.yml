@@ -1,0 +1,64 @@
+name: example-nestjs-eventstoredb
+
+# Excludes rarely edited directories / files from sync to win performance.
+# You may override this in your local Landofile. See `example.lando.local.yml`
+excludes:
+  - node_modules
+
+services:
+  # The Node.js service to run the Nest application.
+  nodejs:
+    type: node
+    globals:
+      # Globally install the Nest CLI tool.
+      '@nestjs/cli': 'latest'
+    overrides:
+      environment:
+        # Our app uses this value to establish a connection to the Event Store.
+        EVENTSTORE_HOST: eventstore:2113
+      command: nest start --watch
+    build:
+      - echo && tput setaf 2 && echo "Preparing Nest Project..." && tput sgr 0;
+      - npm install;
+
+  eventstore:
+    # The EventStoreDB service for hosting the database.
+    type: compose
+    services:
+      image: eventstore/eventstore:21.10.2-buster-slim
+      command: /opt/eventstore/eventstored
+      user: eventstore
+      environment:
+        - EVENTSTORE_CLUSTER_SIZE=1
+        - EVENTSTORE_RUN_PROJECTIONS=All
+        - EVENTSTORE_START_STANDARD_PROJECTIONS=true
+        - EVENTSTORE_EXT_TCP_PORT=1113
+        - EVENTSTORE_HTTP_PORT=2113
+        - EVENTSTORE_ENABLE_EXTERNAL_TCP=true
+        - EVENTSTORE_ENABLE_ATOM_PUB_OVER_HTTP=true
+        - EVENTSTORE_INSECURE=true
+      ports:
+        - 2113
+      volumes:
+        # Use persistent storage for the database.
+        - type: volume
+          source: eventstore-volume-data
+          target: /var/lib/eventstore
+    volumes:
+      # Enable persistent storage for the database.
+      eventstore-volume-data:
+
+proxy:
+  nodejs:
+    # Route http://example-nest.lndo.site to port 3000 of the Node.js service.
+    - example-nest.lndo.site:3000
+  eventstore:
+    # Route http://example-eventstore.lndo.site to port 2113 of the EventStoreDB service.
+    - example-eventstore.lndo.site:2113
+
+tooling:
+  # Expose npm and nest commands to the local machine.
+  npm:
+    service: nodejs
+  nest:
+    service: nodejs
