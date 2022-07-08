@@ -1,0 +1,83 @@
+# An example Lando configuration for Drupal.
+# See https://github.com/AaronFeledy/lando-examples/ for the latest.
+name: example-drupal
+recipe: drupal9
+
+# The default webroot directory when installing Drupal via composer is `web`. This tells Lando
+# to look there for your index.php file. Change this if you are not using the default.
+config:
+  webroot: web
+
+# Excludes rarely edited directories and files from Docker's file sharing to improve performance.
+# Changes made within these directories will only live inside your app and not be synced back to
+# your host. If you need these files to sync to your host, you can override this in your
+# .lando.local.yml by copying this block and adding an exclamation point in front of the path
+# that should be syncing. (`- !drupal/vendor`)
+excludes:
+  - vendor
+  - sites/default/files
+
+# The mode to use when we enable Xdebug.
+# See https://github.com/AaronFeledy/lando-examples/tree/main/xdebug
+services:
+  appserver:
+    overrides:
+      environment:
+        XDEBUG_MODE: 'debug'
+
+tooling:
+  # Use `lando install` to install composer dependencies. You should run this command
+  # after git checkouts, pulls, or merges to ensure your dependencies are up to date.
+  install:
+    description: Install Composer dependencies
+    service: appserver
+    env:
+      # The Drupal root is the directory containing your composer.json. Change this if Drupal is in a subdirectory of your project.
+      DRUPAL_ROOT: /app
+      COMPOSER_DISCARD_CHANGES: true
+      COMPOSER_PROCESS_TIMEOUT: 600
+    cmd:
+      - echo && tput setaf 2 && echo "Preparing Drupal..." && tput sgr 0
+      - cd $DRUPAL_ROOT && composer install --no-interaction
+
+  drupal-update:
+    description: Update a Drupal module by machine name or pass no module name to update Drupal core.
+    service: appserver
+    env:
+      DRUPAL_ROOT: /app
+      DRUPAL_PROJECT: core-recommended
+      COMPOSER_DISCARD_CHANGES: true
+      COMPOSER_PROCESS_TIMEOUT: 600
+    cmd:
+      - bash -c 'MODULE=$DRUPAL_PROJECT; test ${!#} != bash && MODULE=${!#}; cd $DRUPAL_ROOT && composer update drupal/$MODULE --with-dependencies && true || false'
+      - cd $DRUPAL_ROOT && drush updb -y --no-cache-clear && drush cr && drush cex -y && true || false
+      - cd /app && git status && true || false
+      - echo && echo composer.lock has been updated. Continue a git merge or rebase with $(tput setaf 3)git merge --continue$(tput sgr 0) or $(tput setaf 3)git rebase --continue$(tput sgr 0).
+
+  lock-update:
+    description: Reset and update the composer.lock file to quickly resolve merge conflicts.
+    service: appserver
+    env:
+      DRUPAL_ROOT: /app
+      COMPOSER_PROCESS_TIMEOUT: 600
+    cmd:
+      - git diff --check --exit-code -- $DRUPAL_ROOT/composer.json || { echo "Fix merge conflicts in composer.json before executing this command." && exit 1; }
+      - git checkout HEAD -- $DRUPAL_ROOT/composer.lock
+      - cd $DRUPAL_ROOT && composer update --lock -W
+      - git add $DRUPAL_ROOT/composer.lock
+
+  xdebug:
+    service: appserver
+    description: Enable Xdebug.
+    user: root
+    cmd:
+      - docker-php-ext-enable xdebug && kill -USR2 $(pgrep -o php-fpm) || /etc/init.d/apache2 reload
+      - tput setaf 2 && echo "Xdebug On" && tput sgr 0 && echo
+
+  xdebug-off:
+    service: appserver
+    description: Disable Xdebug.
+    user: root
+    cmd:
+      - rm /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && kill -USR2 $(pgrep -o php-fpm) || /etc/init.d/apache2 reload
+      - tput setaf 1 && echo "Xdebug Off" && tput sgr 0 && echo

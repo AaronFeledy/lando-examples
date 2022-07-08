@@ -20,7 +20,7 @@ These examples provide useful tooling for environment-specific use cases such as
 
 ## Advanced Configurations
 Examples of advanced functionality and configurations using Lando.
-
+- [Drupal Starter](drupal) - Configuration and tooling to improve the developer experience when working with Drupal.
 - [Local Static Site Generator](tome): 
   Leverage Lando, Drupal, and the Tome module to run a local "App" that can be downloaded and run on demand.
 - [Platform.sh ](platformsh):
