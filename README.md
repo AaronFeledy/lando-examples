@@ -13,7 +13,7 @@ These examples provide useful functionality that can be added to any Lando confi
 ## Advanced Configurations
 
 Examples of advanced functionality and configurations using Lando.
-
+- [Drupal Starter](https://github.com/AaronFeledy/lando-examples/tree/master/drupal) - Configuration and tooling to improve the developer experience when working with Drupal.
 - [Local Static Site Generator](https://github.com/AaronFeledy/lando-examples/tree/master/tome) - Leverage Lando, Drupal, and the Tome module to run a local "App" that can be downloaded and run on demand.
 - [Platform.sh ](https://github.com/AaronFeledy/lando-examples/tree/master/platformsh) - Demonstrates installing the Platform.sh CLI and some useful tooling for interacting with Platform.sh.
 - Decoupled Drupal with Gatsby - Coming soon - A Lando environment for developing decoupled Drupal with a Gatsby front-end.
