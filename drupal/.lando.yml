@@ -15,7 +15,9 @@ config:
 # that should be syncing. (`- !drupal/vendor`)
 excludes:
   - vendor
-  - sites/default/files
+  - web/sites/default/files
+  - modules/contrib
+  - themes/contrib
 
 # The mode to use when we enable Xdebug.
 # See https://github.com/AaronFeledy/lando-examples/tree/main/xdebug
@@ -33,24 +35,44 @@ tooling:
     service: appserver
     env:
       # The Drupal root is the directory containing your composer.json. Change this if Drupal is in a subdirectory of your project.
-      DRUPAL_ROOT: /app
+      DRUPAL_ROOT: .
       COMPOSER_DISCARD_CHANGES: true
       COMPOSER_PROCESS_TIMEOUT: 600
     cmd:
       - echo && tput setaf 2 && echo "Preparing Drupal..." && tput sgr 0
-      - cd $DRUPAL_ROOT && composer install --no-interaction
+      - cd "/app/$DRUPAL_ROOT" && composer install --no-interaction
+
+  # Use `lando db-reset` to reset your database and apply the most recent config and database updates from code and
+  # config. This works by dropping your current database, then importing the most recent database dump from the project
+  # root. It then performs a common routine including using Drush to perform database updates, rebuild caches, and
+  # import the latest config from the code base.
+  db-reset:
+    description: Reset the Drupal environment
+    service: appserver
+    env:
+      # The Drupal root is the directory containing your composer.json. Set this if Drupal is in a subdirectory of your project.
+      DRUPAL_ROOT: .
+    cmd:
+      - database: cd /app && /helpers/sql-import.sh $(ls -t *.sql.zip -t *.sql.gz -t *.mysql.gz | head -n1)
+      - appserver: echo && tput setaf 2 && echo "Checking for Drupal schema updates..." && tput sgr 0
+      - appserver: cd "/app/$DRUPAL_ROOT" && drush updatedb --yes --no-cache-clear
+      - appserver: cd "/app/$DRUPAL_ROOT" && drush cache:rebuild
+      - appserver: cd "/app/$DRUPAL_ROOT" && drush config:import --yes
+      - appserver: cd "/app/$DRUPAL_ROOT" && drush config:import --yes
+      - appserver: cd "/app/$DRUPAL_ROOT" && drush cache:rebuild
+      - appserver: cd "/app/$DRUPAL_ROOT" && drush user:login
 
   drupal-update:
     description: Update a Drupal module by machine name or pass no module name to update Drupal core.
     service: appserver
     env:
-      DRUPAL_ROOT: /app
+      DRUPAL_ROOT: .
       DRUPAL_PROJECT: core-recommended
       COMPOSER_DISCARD_CHANGES: true
       COMPOSER_PROCESS_TIMEOUT: 600
     cmd:
-      - bash -c 'MODULE=$DRUPAL_PROJECT; test ${!#} != bash && MODULE=${!#}; cd $DRUPAL_ROOT && composer update drupal/$MODULE --with-dependencies && true || false'
-      - cd $DRUPAL_ROOT && drush updb -y --no-cache-clear && drush cr && drush cex -y && true || false
+      - bash -c 'MODULE=$DRUPAL_PROJECT; test ${!#} != bash && MODULE=${!#}; cd "/app/$DRUPAL_ROOT" && composer update drupal/$MODULE --with-dependencies && true || false'
+      - cd "/app/$DRUPAL_ROOT" && drush updb -y --no-cache-clear && drush cr && drush cex -y && true || false
       - cd /app && git status && true || false
       - echo && echo composer.lock has been updated. Continue a git merge or rebase with $(tput setaf 3)git merge --continue$(tput sgr 0) or $(tput setaf 3)git rebase --continue$(tput sgr 0).
 
@@ -58,13 +80,14 @@ tooling:
     description: Reset and update the composer.lock file to quickly resolve merge conflicts.
     service: appserver
     env:
-      DRUPAL_ROOT: /app
+      DRUPAL_ROOT: .
       COMPOSER_PROCESS_TIMEOUT: 600
     cmd:
-      - git diff --check --exit-code -- $DRUPAL_ROOT/composer.json || { echo "Fix merge conflicts in composer.json before executing this command." && exit 1; }
-      - git checkout HEAD -- $DRUPAL_ROOT/composer.lock
-      - cd $DRUPAL_ROOT && composer update --lock -W
-      - git add $DRUPAL_ROOT/composer.lock
+      - git diff --check --exit-code -- "/app/$DRUPAL_ROOT/composer.json" || { echo "Fix merge conflicts in composer.json before executing this command." && exit 1; }
+      - git checkout HEAD -- "/app/$DRUPAL_ROOT/composer.lock"
+      - cd "/app/$DRUPAL_ROOT" && composer update --lock -W
+      - git add "/app/$DRUPAL_ROOT/composer.lock"
+      - echo && echo composer.lock has been updated. Continue a git merge or rebase with $(tput setaf 3)git merge --continue$(tput sgr 0) or $(tput setaf 3)git rebase --continue$(tput sgr 0).
 
   xdebug:
     service: appserver
