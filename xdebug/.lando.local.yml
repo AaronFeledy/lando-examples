@@ -1,0 +1,18 @@
+# This file contains overrides for your Lando configuration that are specific
+# to you or your computer. You generally should not commit this file to your
+# repository as it may contain sensitive information or configurations that are
+# not relevant to other developers.
+
+services:
+  appserver: # The name of your php service if not appserver
+    overrides:
+      environment:
+        # Windows with WSL2:
+        # When your IDE is in WSL2 or it is using a WSL2 integration while your
+        # browser is in Windows, Xdebug needs to know how to connect to the
+        # IDE which will have a different IP address than the inbound request
+        # from the browser. Uncomment the following line to configure Xdebug to
+        # connect to `host.docker.internal` which will resolve to the correct
+        # IP address for the IDE or the IDE's WSL2 backend.
+        #
+        # - XDEBUG_CONFIG='client_host=host.docker.internal discover_client_host=1 log=/tmp/xdebug.log'

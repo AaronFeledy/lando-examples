@@ -11,12 +11,13 @@ These examples provide useful functionality that can be added to any Lando confi
 - [Colorful Messages](colorful-messages): 
   Set variables to represent text colors and use them in your build steps, tooling, or events to produce colorful 
   messages in your terminal output.
-
-## Environment-Specific Enhancements
-These examples provide useful tooling for environment-specific use cases such as PHP-based applications.
-
-- [Xdebug On/Off Switch](xdebug):
-  Tooling to enable and disable Xdebug on demand to improve performance when not actively debugging your PHP app.
+- [Xdebug Configuration and Tooling](xdebug):
+  This example contains a working configuration for Xdebug in Lando. It has
+  been tested with PhpStorm and VSCode on Windows, Mac, and Linux and includes
+  the following features:
+    - Improve performance when not actively debugging your PHP app by only enabling Xdebug when needed via on/off commands without rebuilding your Lando environment.
+    - WSL2 configuration for Xdebug to work with Windows browsers and WSL2 integrated IDEs.
+    - A diagnostic PHP script that will help you determine if Xdebug is enabled and properly configured in your Lando environment.
 
 ## Advanced Configurations
 These examples demonstrate advanced configurations and tooling for specific use cases.

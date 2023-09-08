@@ -1,5 +1,5 @@
 name: example-xdebug
-recipe: drupal9
+recipe: drupal10
 
 config:
   webroot: .
@@ -10,7 +10,7 @@ services:
   appserver:
     overrides:
       environment:
-        XDEBUG_MODE: 'debug,develop'
+        - XDEBUG_MODE=debug,develop
 
 tooling:
   xdebug-on:
