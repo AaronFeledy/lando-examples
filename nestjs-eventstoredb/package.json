@@ -24,7 +24,7 @@
     "@eventstore/db-client": "^3.3.1",
     "@nestjs/common": "^10.2.8",
     "@nestjs/core": "^8.4.4",
-    "@nestjs/platform-express": "^8.4.4",
+    "@nestjs/platform-express": "^10.3.6",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.5.5",
