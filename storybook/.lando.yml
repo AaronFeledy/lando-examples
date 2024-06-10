@@ -1,0 +1,34 @@
+name: example-storybook
+
+services:
+  storybook:
+    type: node:18 # Use Node.js 18
+    port: 6006 # Storybook default port
+    command: npm run storybook # Automatically start Storybook when the service starts
+    build:
+      - npm install # Install dependencies
+
+
+proxy:
+  storybook:
+    # Access Storybook at http://storybook.example.lndo.site
+    - storybook.example.lndo.site:6006
+
+tooling:
+  # Add a `lando npm` command that runs in the `storybook` service by default.
+  npm:
+    service: :service
+    cmd: npm
+    options:
+      service:
+        default: storybook
+        describe: Run npm in the specified service
+
+  # Add a `lando npx` command that runs in the `storybook` service by default.
+  npx:
+    service: :service
+    cmd: npx
+    options:
+      service:
+        default: storybook
+        describe: Run npx in the specified service
