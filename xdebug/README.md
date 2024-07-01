@@ -27,7 +27,7 @@ Use `lando xdebug-on` to enable Xdebug and `lando xdebug-off` to disable Xdebug.
 
 ## Xdebug Status Script
 
-This example includes a [xdebug.php](PHP script) that will help you determine if
+This example includes a [PHP script](xdebug.php) that will help you determine if
 Xdebug is enabled and properly configured in your Lando environment. The script
 will output the status of Xdebug and the configuration settings that are in use
 to help you troubleshoot any issues you might have with Xdebug. Just drop it in
