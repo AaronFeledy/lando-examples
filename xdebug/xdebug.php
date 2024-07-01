@@ -1,4 +1,9 @@
 <?php
+// A simple script to check if Xdebug is properly installed and configured.
+// Place this file in your webroot and open it in your browser to see useful
+// troubleshooting information.
+// Created by: Aaron Feledy @AaronFeledy
+// License: MIT
 echo '<html lang="en">';
 echo '<head>';
 echo '<title>Xdebug Diag</title>';
