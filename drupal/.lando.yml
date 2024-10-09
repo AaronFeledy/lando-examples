@@ -55,12 +55,7 @@ tooling:
     cmd:
       - database: cd /app && /helpers/sql-import.sh $(ls -t *.sql.zip -t *.sql.gz -t *.mysql.gz | head -n1)
       - appserver: echo && tput setaf 2 && echo "Checking for Drupal schema updates..." && tput sgr 0
-      - appserver: cd "/app/$DRUPAL_ROOT" && drush updatedb --yes --no-cache-clear
-      - appserver: cd "/app/$DRUPAL_ROOT" && drush cache:rebuild
-      - appserver: cd "/app/$DRUPAL_ROOT" && drush config:import --yes
-      - appserver: cd "/app/$DRUPAL_ROOT" && drush config:import --yes
-      - appserver: cd "/app/$DRUPAL_ROOT" && drush cache:rebuild
-      - appserver: cd "/app/$DRUPAL_ROOT" && drush user:login
+      - appserver: cd "/app/$DRUPAL_ROOT" && drush deploy
 
   drupal-update:
     description: Update a Drupal module by machine name or pass no module name to update Drupal core.
