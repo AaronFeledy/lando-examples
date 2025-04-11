@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "@eventstore/db-client": "^3.3.1",
-    "@nestjs/common": "^10.2.8",
+    "@nestjs/common": "^11.0.16",
     "@nestjs/core": "^10.4.3",
     "@nestjs/platform-express": "^10.3.6",
     "reflect-metadata": "^0.1.13",
