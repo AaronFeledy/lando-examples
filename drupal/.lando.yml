@@ -25,7 +25,7 @@ services:
   appserver:
     overrides:
       environment:
-        XDEBUG_MODE: 'debug'
+        XDEBUG_MODE: "debug,develop"
 
 tooling:
   # Use `lando install` to install composer dependencies. You should run this command
