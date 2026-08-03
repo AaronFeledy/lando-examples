@@ -10,7 +10,7 @@ services:
   appserver:
     overrides:
       environment:
-        - XDEBUG_MODE=debug,develop
+        XDEBUG_MODE: "debug,develop"
 
 tooling:
   xdebug-on:

@@ -15,4 +15,4 @@ services:
         # connect to `host.docker.internal` which will resolve to the correct
         # IP address for the IDE or the IDE's WSL2 backend.
         #
-        # - XDEBUG_CONFIG='client_host=host.docker.internal discover_client_host=1 log=/tmp/xdebug.log'
+        # XDEBUG_CONFIG: "client_host=host.docker.internal discover_client_host=1 log=/tmp/xdebug.log"
